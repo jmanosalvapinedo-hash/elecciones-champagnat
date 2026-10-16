@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="skin1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffd5b8"/>
+      <stop offset="100%" stop-color="#f6be98"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="96" fill="url(#bg1)"/>
+  <circle cx="100" cy="100" r="92" fill="#eff6ff" stroke="#93c5fd" stroke-width="3"/>
+  <!-- Hair back -->
+  <path d="M60 90 Q100 45 140 90 Q145 60 100 45 Q55 60 60 90 Z" fill="#2d221e"/>
+  <!-- Neck -->
+  <rect x="88" y="120" width="24" height="24" fill="url(#skin1)"/>
+  <!-- Head -->
+  <ellipse cx="100" cy="95" rx="34" ry="40" fill="url(#skin1)"/>
+  <!-- Hair front -->
+  <path d="M66 85 Q75 55 100 55 Q125 55 134 82 Q125 65 100 65 Q75 65 66 85 Z" fill="#2d221e"/>
+  <!-- Eyes -->
+  <circle cx="88" cy="95" r="4" fill="#1e293b"/>
+  <circle cx="112" cy="95" r="4" fill="#1e293b"/>
+  <circle cx="89" cy="94" r="1.5" fill="#ffffff"/>
+  <circle cx="113" cy="94" r="1.5" fill="#ffffff"/>
+  <!-- Eyebrows -->
+  <path d="M82 87 Q88 84 94 87" stroke="#2d221e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M106 87 Q112 84 118 87" stroke="#2d221e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Smile -->
+  <path d="M90 112 Q100 124 110 112" stroke="#b45309" stroke-width="3" fill="#ffffff" stroke-linecap="round"/>
+  <!-- School Uniform Collar and Blazer -->
+  <!-- White Shirt -->
+  <polygon points="100,140 82,130 118,130" fill="#ffffff"/>
+  <!-- Blue School Blazer -->
+  <path d="M42 200 L65 145 Q100 135 135 145 L158 200 Z" fill="#1e3a8a"/>
+  <!-- Lapel -->
+  <polygon points="100,165 78,140 88,135" fill="#1d4ed8"/>
+  <polygon points="100,165 122,140 112,135" fill="#1d4ed8"/>
+  <!-- School Tie (Gold/Blue striped) -->
+  <polygon points="97,135 103,135 105,175 100,182 95,175" fill="#d97706"/>
+  <!-- School Badge -->
+  <circle cx="68" cy="165" r="6" fill="#fbbf24" stroke="#ffffff" stroke-width="1.5"/>
+</svg>

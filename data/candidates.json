@@ -1,0 +1,104 @@
+[
+  {
+    "id": "lista-1",
+    "number": 1,
+    "name": "Fuerza Estudiantil",
+    "slogan": "Unidos por un colegio más justo, innovador y participativo",
+    "color": "#2563eb",
+    "bgLight": "#eff6ff",
+    "border": "#3b82f6",
+    "badge": "LISTA 1",
+    "alcalde": {
+      "name": "Mateo Salazar Quispe",
+      "grade": "5to de Secundaria - A",
+      "cargo": "Candidato a Alcalde",
+      "photo": "assets/candidates/candidate_1.svg"
+    },
+    "teniente": {
+      "name": "Camila Vargas Huamán",
+      "grade": "4to de Secundaria - B",
+      "cargo": "Teniente Alcaldesa"
+    },
+    "regidores": [
+      { "cargo": "Educación, Cultura y Deporte", "name": "Lucas Benítez Castillo" },
+      { "cargo": "Salud y Medio Ambiente", "name": "Sofía Carranza Vidal" },
+      { "cargo": "Emprendimiento Escolar", "name": "Daniel Osorio Poma" },
+      { "cargo": "Derechos del Niño y Adolescente", "name": "Andrea Morales Luna" },
+      { "cargo": "Tecnología y Comunicaciones", "name": "Thiago Rivas Mendoza" }
+    ],
+    "proposals": [
+      "Instalación de puntos de reciclaje y dispensadores de agua en patios.",
+      "Gran campeonato inter-aulas de fútbol, vóley y torneo de ajedrez.",
+      "Mejora de la conectividad WiFi y talleres de computación extracurricular.",
+      "Buzón digital de ayuda y prevención contra el acoso escolar."
+    ]
+  },
+  {
+    "id": "lista-2",
+    "number": 2,
+    "name": "Innovación y Acción",
+    "slogan": "Acciones reales para transformar nuestra convivencia escolar",
+    "color": "#059669",
+    "bgLight": "#ecfdf5",
+    "border": "#10b981",
+    "badge": "LISTA 2",
+    "alcalde": {
+      "name": "Valeria Mendoza Castillo",
+      "grade": "5to de Secundaria - B",
+      "cargo": "Candidata a Alcaldesa",
+      "photo": "assets/candidates/candidate_2.svg"
+    },
+    "teniente": {
+      "name": "Sebastián Paredes Torres",
+      "grade": "4to de Secundaria - A",
+      "cargo": "Teniente Alcalde"
+    },
+    "regidores": [
+      { "cargo": "Educación, Cultura y Deporte", "name": "Gabriel Ramos Silva" },
+      { "cargo": "Salud y Medio Ambiente", "name": "Luciana Chumpitaz Solís" },
+      { "cargo": "Emprendimiento Escolar", "name": "Joaquín Navarro Vega" },
+      { "cargo": "Derechos del Niño y Adolescente", "name": "Mariana Rojas Prado" },
+      { "cargo": "Tecnología y Comunicaciones", "name": "Kevin Alarcón Cruz" }
+    ],
+    "proposals": [
+      "Talleres sabatinos de oratoria, robótica y primeros auxilios.",
+      "Feria de ciencias y festival gastronómico para fondos de graduación.",
+      "Programa 'Aulas Verdes': adopción y cuidado de jardines escolares.",
+      "Renovación de implementos de educación física y recreación."
+    ]
+  },
+  {
+    "id": "lista-3",
+    "number": 3,
+    "name": "Unión y Liderazgo",
+    "slogan": "Tu voz, nuestro compromiso y el futuro que merecemos",
+    "color": "#d97706",
+    "bgLight": "#fffbeb",
+    "border": "#f59e0b",
+    "badge": "LISTA 3",
+    "alcalde": {
+      "name": "Alejandro Cruz Delgado",
+      "grade": "5to de Secundaria - C",
+      "cargo": "Candidato a Alcalde",
+      "photo": "assets/candidates/candidate_3.svg"
+    },
+    "teniente": {
+      "name": "Fernanda Silva Aguirre",
+      "grade": "4to de Secundaria - C",
+      "cargo": "Teniente Alcaldesa"
+    },
+    "regidores": [
+      { "cargo": "Educación, Cultura y Deporte", "name": "Diego Villanueva Ríos" },
+      { "cargo": "Salud y Medio Ambiente", "name": "Paula Chávez Cano" },
+      { "cargo": "Emprendimiento Escolar", "name": "Rodrigo Flores Neyra" },
+      { "cargo": "Derechos del Niño y Adolescente", "name": "Mía Peña Valera" },
+      { "cargo": "Tecnología y Comunicaciones", "name": "Carlos Valdivia Soto" }
+    ],
+    "proposals": [
+      "Creación de la Radio Escolar y Podcast oficial de estudiantes.",
+      "Campaña constante de salud mental y bienestar emocional.",
+      "Cine-foro mensual educativo en el auditorio principal.",
+      "Botiquines equipados en cada pabellón y chequeo de baños."
+    ]
+  }
+]

@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Control y Monitoreo - Elecciones del Municipio Escolar</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Socket.io -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/custom.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans">
+
+  <!-- ========================================== -->
+  <!-- LOGIN OVERLAY / PIN PROTECTION             -->
+  <!-- ========================================== -->
+  <div id="admin-login-modal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-slate-800 border border-slate-700 w-full max-w-md rounded-3xl p-6 md:p-8 shadow-2xl text-center animate-fade-scale">
+      <div class="w-16 h-16 bg-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-blue-500/40">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+        </svg>
+      </div>
+      <h2 class="text-2xl font-black text-white">Acceso al Servidor</h2>
+      <p class="text-xs text-slate-400 mt-1">Ingresa la contraseña del Comité Electoral / Docente</p>
+
+      <div id="login-error-box" class="hidden my-4 p-3 rounded-xl bg-red-500/20 border border-red-500/40 text-red-300 text-xs text-left">
+        Contraseña incorrecta. (Clave por defecto: <code class="font-bold text-white">admin</code>)
+      </div>
+
+      <div class="mt-4 text-left">
+        <label for="admin-pass-input" class="block text-xs font-bold uppercase text-slate-400 mb-1">Contraseña</label>
+        <input 
+          type="password" 
+          id="admin-pass-input" 
+          placeholder="••••••••" 
+          class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/40 font-mono tracking-widest text-center"
+        >
+        <p class="text-[11px] text-slate-500 mt-1 text-center">Contraseña inicial: <strong class="text-slate-400">admin</strong></p>
+      </div>
+
+      <button 
+        id="btn-login" 
+        class="w-full mt-6 py-3.5 bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 transition cursor-pointer"
+      >
+        Ingresar al Panel
+      </button>
+
+      <a href="/" class="inline-block mt-4 text-xs text-slate-500 hover:text-slate-300">
+        ← Volver a la pantalla de votación
+      </a>
+    </div>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- TOP NAVIGATION BAR                         -->
+  <!-- ========================================== -->
+  <header class="bg-slate-800/90 border-b border-slate-700 backdrop-blur sticky top-0 z-40 px-4 md:px-8 py-3 shadow-md">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Brand & School -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-12 rounded-xl bg-white p-1 flex items-center justify-center shadow overflow-hidden border border-amber-400">
+          <img src="assets/insignia.png" alt="Insignia San Marcelino Champagnat" class="w-full h-full object-contain">
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="font-extrabold text-base md:text-lg text-white tracking-tight">
+              Servidor Central • Elecciones Escolares
+            </h1>
+            <span id="badge-status" class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center space-x-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span id="badge-status-text">EN CURSO</span>
+            </span>
+          </div>
+          <p id="admin-school-name" class="text-xs text-slate-400">
+            I.E. San Marcelino Champagnat • Comité Electoral
+          </p>
+        </div>
+      </div>
+
+      <!-- LAN IP Banner & Controls -->
+      <div class="flex items-center flex-wrap gap-3">
+        
+        <!-- Local IP badge for student PCs -->
+        <div class="bg-slate-900 border border-slate-700/80 px-3 py-1.5 rounded-xl flex items-center space-x-2 text-xs">
+          <span class="text-slate-400">IP para PCs alumnos:</span>
+          <code id="server-lan-ip" class="font-mono font-bold text-amber-400">Cargando...</code>
+          <button id="btn-copy-ip" class="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition" title="Copiar URL">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Emergency Lock/Unlock Button -->
+        <button 
+          id="btn-toggle-lock" 
+          type="button" 
+          class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2 bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 active:scale-[0.98] cursor-pointer"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+          <span id="btn-toggle-lock-text">Pausar Votaciones</span>
+        </button>
+
+        <!-- Prominent Reset Votes Button -->
+        <button 
+          id="btn-quick-reset" 
+          type="button" 
+          class="px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 bg-red-600/30 text-red-300 border border-red-500/50 hover:bg-red-600 hover:text-white active:scale-[0.98] cursor-pointer"
+          title="Reiniciar todas las votaciones y poner contadores en cero"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          <span>Reiniciar Votos a 0</span>
+        </button>
+
+        <!-- Exit / Student view -->
+        <a href="/" target="_blank" class="px-3 py-2 bg-slate-700/80 hover:bg-slate-700 rounded-xl text-xs font-semibold text-slate-200 transition flex items-center space-x-1">
+          <span>Abrir Cabina</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+          </svg>
+        </a>
+
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- ========================================== -->
+  <!-- MAIN DASHBOARD CONTENT                     -->
+  <!-- ========================================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
+
+    <!-- REAL-TIME KPI CARDS ROW -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      
+      <!-- Total Padrón -->
+      <div class="bg-slate-800/80 border border-slate-700/70 p-5 rounded-2xl shadow-lg relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Padrón Electoral</span>
+          <span class="p-2 bg-blue-500/10 text-blue-400 rounded-xl">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+          </span>
+        </div>
+        <div id="stat-total-padron" class="text-3xl font-black text-white mt-2">--</div>
+        <div class="text-[11px] text-slate-400 mt-1">Estudiantes habilitados</div>
+      </div>
+
+      <!-- Votos Emitidos -->
+      <div class="bg-slate-800/80 border border-slate-700/70 p-5 rounded-2xl shadow-lg relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Votos Emitidos</span>
+          <span class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </span>
+        </div>
+        <div id="stat-total-votes" class="text-3xl font-black text-emerald-400 mt-2">--</div>
+        <div class="text-[11px] text-slate-400 mt-1">Sufragios registrados</div>
+      </div>
+
+      <!-- Participación % -->
+      <div class="bg-slate-800/80 border border-slate-700/70 p-5 rounded-2xl shadow-lg relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Participación</span>
+          <span class="p-2 bg-purple-500/10 text-purple-400 rounded-xl">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+            </svg>
+          </span>
+        </div>
+        <div id="stat-participation" class="text-3xl font-black text-purple-400 mt-2">0.0%</div>
+        <div class="w-full bg-slate-700 h-1.5 rounded-full mt-2 overflow-hidden">
+          <div id="bar-participation" class="bg-purple-500 h-full w-0 transition-all duration-700"></div>
+        </div>
+      </div>
+
+      <!-- Pendientes -->
+      <div class="bg-slate-800/80 border border-slate-700/70 p-5 rounded-2xl shadow-lg relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Por Votar</span>
+          <span class="p-2 bg-amber-500/10 text-amber-400 rounded-xl">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </span>
+        </div>
+        <div id="stat-pending" class="text-3xl font-black text-amber-400 mt-2">--</div>
+        <div class="text-[11px] text-slate-400 mt-1">Alumnos restantes</div>
+      </div>
+
+    </div>
+
+
+    <!-- DYNAMIC CHARTS ROW -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Bar Chart: Votos por Lista -->
+      <div class="lg:col-span-2 bg-slate-800/90 border border-slate-700/80 p-5 md:p-6 rounded-2xl shadow-xl">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="font-extrabold text-white text-base md:text-lg">Resultados por Lista en Tiempo Real</h3>
+            <p class="text-xs text-slate-400">Conteo automático actualizado vía WebSockets</p>
+          </div>
+          <span class="px-2 py-1 bg-slate-700 text-slate-300 text-xs font-bold rounded-lg flex items-center space-x-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>En vivo</span>
+          </span>
+        </div>
+        <div class="relative h-64 md:h-72 w-full">
+          <canvas id="chart-candidates"></canvas>
+        </div>
+      </div>
+
+      <!-- Doughnut Chart: Votos Válidos vs Blanco vs Nulo -->
+      <div class="bg-slate-800/90 border border-slate-700/80 p-5 md:p-6 rounded-2xl shadow-xl flex flex-col justify-between">
+        <div>
+          <h3 class="font-extrabold text-white text-base md:text-lg">Distribución de Votos</h3>
+          <p class="text-xs text-slate-400">Válidos, Blancos y Nulos</p>
+          <div class="relative h-52 w-full mt-2 flex items-center justify-center">
+            <canvas id="chart-distribution"></canvas>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 pt-4 border-t border-slate-700/80 text-center text-xs">
+          <div>
+            <div class="text-emerald-400 font-bold" id="dist-valid">0 (0%)</div>
+            <div class="text-[10px] text-slate-400 uppercase">Válidos</div>
+          </div>
+          <div>
+            <div class="text-slate-300 font-bold" id="dist-blank">0 (0%)</div>
+            <div class="text-[10px] text-slate-400 uppercase">Blancos</div>
+          </div>
+          <div>
+            <div class="text-red-400 font-bold" id="dist-null">0 (0%)</div>
+            <div class="text-[10px] text-slate-400 uppercase">Nulos</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- TABS NAVIGATION                            -->
+    <!-- ========================================== -->
+    <div class="bg-slate-800 border-b border-slate-700 rounded-t-2xl px-4 flex space-x-2 md:space-x-4 overflow-x-auto">
+      <button class="tab-btn py-3.5 px-4 text-xs md:text-sm font-bold border-b-2 border-blue-500 text-blue-400 flex items-center space-x-2 transition" data-target="tab-results">
+        <span>Resultados Detallados</span>
+      </button>
+      <button class="tab-btn py-3.5 px-4 text-xs md:text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 transition" data-target="tab-activity">
+        <span>Flujo en Directo</span>
+        <span id="activity-badge-count" class="px-1.5 py-0.5 text-[10px] rounded-full bg-blue-500/20 text-blue-300">0</span>
+      </button>
+      <button class="tab-btn py-3.5 px-4 text-xs md:text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 transition" data-target="tab-padron">
+        <span>Padrón Electoral</span>
+      </button>
+      <button class="tab-btn py-3.5 px-4 text-xs md:text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 transition" data-target="tab-reports">
+        <span>Actas y Reportes</span>
+      </button>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- TAB 1: RESULTADOS DETALLADOS               -->
+    <!-- ========================================== -->
+    <div id="tab-results" class="tab-content bg-slate-800/90 border border-slate-700 border-t-0 rounded-b-2xl p-5 md:p-6 space-y-4">
+      <div class="flex items-center justify-between">
+        <h4 class="font-extrabold text-white text-base">Tabla de Posiciones Electorales</h4>
+        <span class="text-xs text-slate-400">Total Válidos: <strong id="lbl-valid-total" class="text-white">0</strong></span>
+      </div>
+
+      <div id="detailed-candidates-list" class="space-y-3">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- TAB 2: FLUJO DE VOTOS EN DIRECTO           -->
+    <!-- ========================================== -->
+    <div id="tab-activity" class="tab-content hidden bg-slate-800/90 border border-slate-700 border-t-0 rounded-b-2xl p-5 md:p-6 space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h4 class="font-extrabold text-white text-base">Auditoría en Tiempo Real de Sufragios</h4>
+          <p class="text-xs text-slate-400">Muestra la actividad de las cabinas manteniendo el secreto del voto del estudiante</p>
+        </div>
+        <span class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 text-xs font-semibold rounded-lg border border-emerald-500/30">
+          Voto Secreto Protegido
+        </span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs text-slate-300">
+          <thead class="bg-slate-900/60 text-slate-400 uppercase font-bold text-[10px] tracking-wider border-b border-slate-700">
+            <tr>
+              <th class="py-3 px-4">Hora</th>
+              <th class="py-3 px-4">Cabina / Terminal IP</th>
+              <th class="py-3 px-4">Grado y Sección</th>
+              <th class="py-3 px-4">Estado</th>
+              <th class="py-3 px-4">ID de Transacción</th>
+            </tr>
+          </thead>
+          <tbody id="activity-table-body" class="divide-y divide-slate-700/60 font-mono">
+            <!-- Rendered dynamically via admin.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- TAB 3: PADRÓN ELECTORAL                    -->
+    <!-- ========================================== -->
+    <div id="tab-padron" class="tab-content hidden bg-slate-800/90 border border-slate-700 border-t-0 rounded-b-2xl p-5 md:p-6 space-y-4">
+      
+      <!-- Top actions -->
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center space-x-2 flex-1 max-w-md">
+          <input 
+            type="text" 
+            id="padron-search-input" 
+            placeholder="Buscar por DNI o nombre de estudiante..." 
+            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+          >
+          <select id="padron-filter-select" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-300 focus:outline-none">
+            <option value="all">Todos</option>
+            <option value="voted">Ya Votaron</option>
+            <option value="pending">Pendientes</option>
+          </select>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <button 
+            id="btn-open-add-voter" 
+            class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition flex items-center space-x-1 cursor-pointer"
+          >
+            <span>+ Agregar Alumno</span>
+          </button>
+          <button 
+            id="btn-gen-demo-voters" 
+            class="px-3.5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold text-xs rounded-xl transition cursor-pointer"
+          >
+            Generar 20 Demo
+          </button>
+        </div>
+      </div>
+
+      <!-- Voters Table -->
+      <div class="overflow-x-auto max-h-96">
+        <table class="w-full text-left text-xs text-slate-300">
+          <thead class="bg-slate-900/60 text-slate-400 uppercase font-bold text-[10px] tracking-wider sticky top-0 border-b border-slate-700">
+            <tr>
+              <th class="py-3 px-4">DNI / Código</th>
+              <th class="py-3 px-4">Apellidos y Nombres</th>
+              <th class="py-3 px-4">Grado y Sección</th>
+              <th class="py-3 px-4">Estado</th>
+              <th class="py-3 px-4">Hora de Sufragio</th>
+              <th class="py-3 px-4 text-right">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="voters-table-body" class="divide-y divide-slate-700/60">
+            <!-- Rendered dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="text-xs text-slate-400 flex justify-between pt-2">
+        <span>Mostrando <strong id="padron-count-shown">0</strong> estudiantes</span>
+        <a href="/api/admin/export/voters-csv" class="text-blue-400 hover:underline">Descargar Padrón Completo en Excel (CSV)</a>
+      </div>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- TAB 4: ACTAS Y REPORTES                    -->
+    <!-- ========================================== -->
+    <div id="tab-reports" class="tab-content hidden bg-slate-800/90 border border-slate-700 border-t-0 rounded-b-2xl p-5 md:p-6 space-y-6">
+      
+      <div>
+        <h4 class="font-extrabold text-white text-base">Descargas y Documentación Oficial</h4>
+        <p class="text-xs text-slate-400">Genera las actas y documentos requeridos para la clausura del proceso electoral escolar</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        <!-- CSV Results -->
+        <div class="bg-slate-900/70 border border-slate-700 p-5 rounded-2xl flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold mb-3">
+              CSV
+            </div>
+            <h5 class="font-bold text-white text-sm">Resultados Electorales (CSV)</h5>
+            <p class="text-xs text-slate-400 mt-1">Archivo compatible con Excel con los votos totales y porcentajes por lista.</p>
+          </div>
+          <a 
+            href="/api/admin/export/csv" 
+            class="mt-4 w-full py-2.5 px-4 bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs rounded-xl text-center transition block"
+          >
+            Descargar Resultados CSV
+          </a>
+        </div>
+
+        <!-- CSV Padron -->
+        <div class="bg-slate-900/70 border border-slate-700 p-5 rounded-2xl flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold mb-3">
+              PAD
+            </div>
+            <h5 class="font-bold text-white text-sm">Registro de Asistencia (CSV)</h5>
+            <p class="text-xs text-slate-400 mt-1">Lista completa de estudiantes con indicación de quiénes sufragaron y quiénes faltaron.</p>
+          </div>
+          <a 
+            href="/api/admin/export/voters-csv" 
+            class="mt-4 w-full py-2.5 px-4 bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs rounded-xl text-center transition block"
+          >
+            Descargar Asistencia CSV
+          </a>
+        </div>
+
+        <!-- Official Acta PDF -->
+        <div class="bg-slate-900/70 border border-slate-700 p-5 rounded-2xl flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold mb-3">
+              PDF
+            </div>
+            <h5 class="font-bold text-white text-sm">Acta Oficial de Escrutinio</h5>
+            <p class="text-xs text-slate-400 mt-1">Documento formal imprimible para firma del Comité Electoral y Director.</p>
+          </div>
+          <a 
+            href="/acta.html" 
+            target="_blank" 
+            class="mt-4 w-full py-2.5 px-4 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-xl text-center transition block"
+          >
+            Abrir e Imprimir Acta
+          </a>
+        </div>
+
+      </div>
+
+      <!-- DANGER ZONE: Reset Election -->
+      <div class="p-5 rounded-2xl bg-red-950/40 border border-red-500/30 mt-8 space-y-3">
+        <div class="flex items-center space-x-3 text-red-400">
+          <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+          <div>
+            <h5 class="font-black text-sm text-red-300 uppercase tracking-wide">Zona de Peligro: Reiniciar Elecciones</h5>
+            <p class="text-xs text-red-400/80">Esta acción borrará todos los votos registrados y pondrá el contador en cero. Requiere clave de seguridad.</p>
+          </div>
+        </div>
+
+        <button 
+          id="btn-open-reset-modal" 
+          class="px-4 py-2.5 bg-red-600 hover:bg-red-500 active:scale-[0.98] text-white font-bold text-xs rounded-xl shadow transition cursor-pointer"
+        >
+          Reiniciar Elección a Cero
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- ========================================== -->
+  <!-- MODAL: AGREGAR ESTUDIANTE AL PADRÓN        -->
+  <!-- ========================================== -->
+  <div id="modal-add-voter" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-800 border border-slate-700 w-full max-w-md rounded-3xl p-6 shadow-2xl animate-fade-scale">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold text-white">Agregar Estudiante al Padrón</h3>
+        <button id="btn-close-add-voter" class="text-slate-400 hover:text-white font-bold text-lg">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-400 uppercase font-bold mb-1">DNI o Código de Estudiante</label>
+          <input type="text" id="add-code" placeholder="Ej. 70050010" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono">
+        </div>
+        <div>
+          <label class="block text-slate-400 uppercase font-bold mb-1">Apellidos y Nombres</label>
+          <input type="text" id="add-name" placeholder="Ej. Luis Ramírez Gómez" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-400 uppercase font-bold mb-1">Grado</label>
+            <input type="text" id="add-grade" placeholder="Ej. 3ro de Secundaria" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white">
+          </div>
+          <div>
+            <label class="block text-slate-400 uppercase font-bold mb-1">Sección</label>
+            <input type="text" id="add-section" placeholder="A" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white">
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-2 mt-6">
+        <button id="btn-cancel-add-voter" class="w-1/2 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl text-xs">Cancelar</button>
+        <button id="btn-submit-add-voter" class="w-1/2 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs">Guardar Alumno</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- MODAL: SEGURIDAD REINICIAR ELECCIÓN        -->
+  <!-- ========================================== -->
+  <div id="modal-reset" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-800 border-2 border-red-500 w-full max-w-md rounded-3xl p-6 shadow-2xl text-center animate-fade-scale">
+      <div class="w-16 h-16 bg-red-500/20 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-red-500/40">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        </svg>
+      </div>
+
+      <h3 class="text-xl font-black text-white">¿Reiniciar Todas las Elecciones?</h3>
+      <p class="text-xs text-slate-300 mt-2">
+        Esta acción es <strong>IRREVERSIBLE</strong>. Se eliminarán permanentemente todos los votos emitidos y se reactivarán todos los códigos de estudiantes.
+      </p>
+
+      <div class="my-4 text-left">
+        <label for="reset-pass-input" class="block text-xs font-bold uppercase text-red-400 mb-1">
+          Ingresa la contraseña de Administrador para confirmar
+        </label>
+        <input 
+          type="password" 
+          id="reset-pass-input" 
+          placeholder="••••••••" 
+          class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white font-mono text-center text-sm"
+        >
+      </div>
+
+      <div class="flex gap-2 mt-6">
+        <button id="btn-cancel-reset" class="w-1/2 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl text-xs">Cancelar</button>
+        <button id="btn-confirm-reset" class="w-1/2 py-2.5 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl text-xs">Sí, Reiniciar a Cero</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Scripts -->
+  <script src="js/admin.js"></script>
+</body>
+</html>

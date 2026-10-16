@@ -1,0 +1,25 @@
+{
+  "name": "elecciones-municipio-escolar",
+  "version": "1.0.0",
+  "description": "Sistema de Votación Electrónica y Monitoreo en Tiempo Real para Elecciones de Municipio Escolar en Red Local (LAN)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "municipio-escolar",
+    "elecciones",
+    "votacion-electronica",
+    "lan",
+    "realtime",
+    "socket.io",
+    "express"
+  ],
+  "author": "Comité Electoral Escolar",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  }
+}

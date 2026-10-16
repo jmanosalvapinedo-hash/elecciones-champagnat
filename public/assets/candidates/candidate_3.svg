@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <linearGradient id="skin3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fbd6bd"/>
+      <stop offset="100%" stop-color="#e9b793"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="96" fill="url(#bg3)"/>
+  <circle cx="100" cy="100" r="92" fill="#fffbeb" stroke="#fde68a" stroke-width="3"/>
+  <!-- Hair back -->
+  <path d="M60 88 Q100 48 140 88 Q142 55 100 45 Q58 55 60 88 Z" fill="#1e1b18"/>
+  <!-- Neck -->
+  <rect x="88" y="120" width="24" height="24" fill="url(#skin3)"/>
+  <!-- Head -->
+  <ellipse cx="100" cy="95" rx="34" ry="40" fill="url(#skin3)"/>
+  <!-- Hair front (modern fade style) -->
+  <path d="M66 84 Q78 54 100 52 Q122 54 134 84 Q122 66 100 66 Q78 66 66 84 Z" fill="#1e1b18"/>
+  <path d="M72 65 Q95 50 120 60 Q105 52 82 56 Z" fill="#382f29"/>
+  <!-- Glasses -->
+  <rect x="74" y="88" width="22" height="15" rx="3" fill="none" stroke="#334155" stroke-width="2.5"/>
+  <rect x="104" y="88" width="22" height="15" rx="3" fill="none" stroke="#334155" stroke-width="2.5"/>
+  <line x1="96" y1="94" x2="104" y2="94" stroke="#334155" stroke-width="2.5"/>
+  <line x1="68" y1="93" x2="74" y2="93" stroke="#334155" stroke-width="2"/>
+  <line x1="126" y1="93" x2="132" y2="93" stroke="#334155" stroke-width="2"/>
+  <!-- Eyes -->
+  <circle cx="85" cy="95" r="3.5" fill="#1e293b"/>
+  <circle cx="115" cy="95" r="3.5" fill="#1e293b"/>
+  <circle cx="86" cy="94" r="1.2" fill="#ffffff"/>
+  <circle cx="116" cy="94" r="1.2" fill="#ffffff"/>
+  <!-- Eyebrows -->
+  <path d="M77 82 Q85 80 92 84" stroke="#1e1b18" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M108 84 Q115 80 123 82" stroke="#1e1b18" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Smile -->
+  <path d="M90 114 Q100 125 110 114" stroke="#c2410c" stroke-width="3" fill="#ffffff" stroke-linecap="round"/>
+  <!-- School Uniform -->
+  <polygon points="100,138 80,128 120,128" fill="#ffffff"/>
+  <!-- Blazer -->
+  <path d="M42 200 L65 145 Q100 135 135 145 L158 200 Z" fill="#78350f"/>
+  <polygon points="100,165 78,140 88,135" fill="#92400e"/>
+  <polygon points="100,165 122,140 112,135" fill="#92400e"/>
+  <!-- Tie (Gold/Amber) -->
+  <polygon points="97,135 103,135 105,175 100,182 95,175" fill="#f59e0b"/>
+  <circle cx="68" cy="165" r="6" fill="#fbbf24" stroke="#ffffff" stroke-width="1.5"/>
+</svg>

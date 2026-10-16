@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="skin2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fcd5be"/>
+      <stop offset="100%" stop-color="#f5be9d"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="96" fill="url(#bg2)"/>
+  <circle cx="100" cy="100" r="92" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="3"/>
+  <!-- Long Hair Back -->
+  <path d="M50 85 Q45 150 65 170 Q100 180 135 170 Q155 150 150 85 Q100 40 50 85 Z" fill="#3b2219"/>
+  <!-- Neck -->
+  <rect x="88" y="120" width="24" height="24" fill="url(#skin2)"/>
+  <!-- Head -->
+  <ellipse cx="100" cy="95" rx="33" ry="38" fill="url(#skin2)"/>
+  <!-- Hair Front Style -->
+  <path d="M55 85 Q75 52 100 52 Q125 52 145 85 Q135 65 100 65 Q65 65 55 85 Z" fill="#3b2219"/>
+  <path d="M52 85 Q58 115 65 140 Q62 105 68 85 Z" fill="#3b2219"/>
+  <path d="M148 85 Q142 115 135 140 Q138 105 132 85 Z" fill="#3b2219"/>
+  <!-- Hairband / Green ribbon -->
+  <path d="M60 70 Q100 56 140 70" stroke="#059669" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <!-- Eyes -->
+  <circle cx="88" cy="95" r="4" fill="#1e293b"/>
+  <circle cx="112" cy="95" r="4" fill="#1e293b"/>
+  <circle cx="89" cy="94" r="1.5" fill="#ffffff"/>
+  <circle cx="113" cy="94" r="1.5" fill="#ffffff"/>
+  <!-- Lashes & Eyebrows -->
+  <path d="M82 86 Q88 83 94 86" stroke="#3b2219" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M106 86 Q112 83 118 86" stroke="#3b2219" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Smile -->
+  <path d="M89 113 Q100 125 111 113" stroke="#be185d" stroke-width="3" fill="#ffffff" stroke-linecap="round"/>
+  <!-- School Uniform -->
+  <polygon points="100,138 80,128 120,128" fill="#ffffff"/>
+  <!-- Green School Blazer -->
+  <path d="M42 200 L65 145 Q100 135 135 145 L158 200 Z" fill="#064e3b"/>
+  <!-- Lapel -->
+  <polygon points="100,165 78,140 88,135" fill="#047857"/>
+  <polygon points="100,165 122,140 112,135" fill="#047857"/>
+  <!-- Tie Ribbon -->
+  <polygon points="98,136 102,136 106,170 100,175 94,170" fill="#f59e0b"/>
+  <!-- School Crest Pin -->
+  <circle cx="68" cy="165" r="6" fill="#10b981" stroke="#ffffff" stroke-width="1.5"/>
+</svg>

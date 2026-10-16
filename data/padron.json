@@ -1,0 +1,227 @@
+[
+  {
+    "id": "1",
+    "code": "70010001",
+    "name": "Valentina Ramos Quispe",
+    "grade": "1ro de Secundaria",
+    "section": "A",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "2",
+    "code": "70010002",
+    "name": "Lucas Morales Benítez",
+    "grade": "1ro de Secundaria",
+    "section": "A",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "3",
+    "code": "70010003",
+    "name": "Camila Flores Espinoza",
+    "grade": "1ro de Secundaria",
+    "section": "B",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "4",
+    "code": "70010004",
+    "name": "Mateo Vargas Chumpitaz",
+    "grade": "1ro de Secundaria",
+    "section": "B",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "5",
+    "code": "70020001",
+    "name": "Daniela Mendoza Rojas",
+    "grade": "2do de Secundaria",
+    "section": "A",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "6",
+    "code": "70020002",
+    "name": "Sebastián Salazar Cruz",
+    "grade": "2do de Secundaria",
+    "section": "A",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "7",
+    "code": "70020003",
+    "name": "Valeria Silva Huamán",
+    "grade": "2do de Secundaria",
+    "section": "B",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "8",
+    "code": "70020004",
+    "name": "Joaquín Paredes Alarcón",
+    "grade": "2do de Secundaria",
+    "section": "B",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "9",
+    "code": "70030001",
+    "name": "Luciana Carranza Solís",
+    "grade": "3ro de Secundaria",
+    "section": "A",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "10",
+    "code": "70030002",
+    "name": "Gabriel Osorio Torres",
+    "grade": "3ro de Secundaria",
+    "section": "A",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "11",
+    "code": "70030003",
+    "name": "Sofía Navarro Luna",
+    "grade": "3ro de Secundaria",
+    "section": "B",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "12",
+    "code": "70030004",
+    "name": "Diego Rivas Valera",
+    "grade": "3ro de Secundaria",
+    "section": "B",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "13",
+    "code": "70040001",
+    "name": "Andrea Chávez Villanueva",
+    "grade": "4to de Secundaria",
+    "section": "A",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "14",
+    "code": "70040002",
+    "name": "Thiago Morales Prado",
+    "grade": "4to de Secundaria",
+    "section": "A",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "15",
+    "code": "70040003",
+    "name": "Mariana Flores Soto",
+    "grade": "4to de Secundaria",
+    "section": "B",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "16",
+    "code": "70040004",
+    "name": "Rodrigo Ramos Cano",
+    "grade": "4to de Secundaria",
+    "section": "B",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "17",
+    "code": "70050001",
+    "name": "Paula Benítez Vega",
+    "grade": "5to de Secundaria",
+    "section": "A",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "18",
+    "code": "70050002",
+    "name": "Carlos Mendoza Neyra",
+    "grade": "5to de Secundaria",
+    "section": "A",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "19",
+    "code": "70050003",
+    "name": "Mía Salazar Chumpitaz",
+    "grade": "5to de Secundaria",
+    "section": "B",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "20",
+    "code": "70050004",
+    "name": "Alejandro Silva Delgado",
+    "grade": "5to de Secundaria",
+    "section": "B",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "21",
+    "code": "70050005",
+    "name": "Fernanda Cruz Aguirre",
+    "grade": "5to de Secundaria",
+    "section": "C",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "22",
+    "code": "70050006",
+    "name": "Kevin Vargas Ramos",
+    "grade": "5to de Secundaria",
+    "section": "C",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "23",
+    "code": "1001",
+    "name": "Estudiante Demo 1 (Cabina Rápida)",
+    "grade": "Secundaria",
+    "section": "Piloto",
+    "hasVoted": true,
+    "votedAt": "2026-10-16T20:12:04.765Z"
+  },
+  {
+    "id": "24",
+    "code": "1002",
+    "name": "Estudiante Demo 2 (Cabina Rápida)",
+    "grade": "Secundaria",
+    "section": "Piloto",
+    "hasVoted": false,
+    "votedAt": null
+  },
+  {
+    "id": "25",
+    "code": "1003",
+    "name": "Estudiante Demo 3 (Cabina Rápida)",
+    "grade": "Secundaria",
+    "section": "Piloto",
+    "hasVoted": false,
+    "votedAt": null
+  }
+]
