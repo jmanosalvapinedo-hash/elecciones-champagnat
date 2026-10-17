@@ -212,8 +212,8 @@
     "name": "Estudiante Demo 2 (Cabina Rápida)",
     "grade": "Secundaria",
     "section": "Piloto",
-    "hasVoted": false,
-    "votedAt": null
+    "hasVoted": true,
+    "votedAt": "2026-10-16T22:53:01.128Z"
   },
   {
     "id": "25",
